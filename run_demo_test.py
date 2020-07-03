@@ -3,7 +3,7 @@ from JSONTestRunner import JSONTestRunner
 from time import strftime
 import os
 
-cases = defaultTestLoader.discover('./cases/', pattern='test*.py')
+cases = defaultTestLoader.discover('demo-cases/', pattern='test*.py')
 # runner = TextTestRunner()
 time_string = strftime('%Y-%m-%d_%H-%M-%S')
 if not os.path.exists('reports'):

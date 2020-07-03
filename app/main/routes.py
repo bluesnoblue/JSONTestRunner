@@ -7,11 +7,33 @@ import json
 @bp.route('/', methods=['GET'])
 def home():
     files = []
+    reports = []
+
     for file in os.listdir('./reports'):
-        file_name = file.split('.')[0]
-        files.append(file_name)
+        file_name, suffix = file.split('.')
+        if suffix == 'json':
+            files.append(file_name)
     files.sort(reverse=True)
-    return render_template('index.html', title='Home Page', files=files)
+    for file in files:
+        with open(f'./reports/{file}.json') as fp:
+            report = json.load(fp)
+            pass_ = int(report['result']['Pass'])
+            fail = int(report['result']['fail'])
+            error = int(report['result']['error'])
+            total = pass_ + fail + error
+            fail_rate = total and str("%.0f%%" % (float(fail) / float(total) * 100)) or '0%'
+            error_rate = total and str("%.0f%%" % (float(error) / float(total) * 100)) or '0%'
+            pass_rate = f'{100-int(fail_rate.split("%")[0])-int(fail_rate.split("%")[0])}%'
+            report_ = dict(
+                file_name=file,
+                Pass=report['result']['Pass'],
+                fail_rate=fail_rate,
+                error_rate=error_rate,
+                pass_rate=pass_rate
+            )
+            report_.update(report['attributes'])
+            reports.append(report_)
+    return render_template('index.html', title='Home Page', reports=reports)
 
 
 @bp.route('/reports/<reports_name>', methods=['GET'])

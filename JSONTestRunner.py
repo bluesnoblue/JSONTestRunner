@@ -226,6 +226,7 @@ class JSONTestRunner:
                 output=output,
                 Class=(n == 0 and 'hiddenRow' or 'none'),  # view渲染相关
                 style=n == 2 and 'errorCase' or (n == 1 and 'failCase' or 'passCase'),  # view渲染相关
+                button_type=n == 0 and 'btn-success' or (n == 1 and 'btn-danger' or 'btn-warning')
             )
             method_results.append(method_result)
         return method_results

@@ -1,0 +1,41 @@
+{% block app_content %}
+    <div class='page-header'>
+        <h1>报告列表</h1>
+    </div>
+
+     <table class="table table-condensed table-hover table table-bordered">
+         <div class="row">
+             <div class="col-md-3" >
+                 <p class="text-center">测试开始时间</p>
+             </div>
+             <div class="col-md-8 text-center">
+                 <p class="text-center">比例</p>
+             </div>
+             <div class="col-md-1">
+             </div>
+        </div>
+
+        {% for report in reports %}
+            <div class="row">
+                <div class="col-md-3">
+                    <p class="text-center">
+                        {{ report.start_time }}
+                    </p>
+                </div>
+                <div class="col-md-8">
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-success" style="width: {{report.pass_rate}}"></div>
+                        <div class="progress-bar progress-bar-danger progress-bar-striped" style="width:  {{report.fail_rate}}"></div>
+                        <div class="progress-bar progress-bar-warning" style="width:  {{report.error_rate}}"></div>
+                    </div>
+                </div>
+                <div>
+                    <a class="btn btn-default" href="{{ url_for('main.report_detail', reports_name = report.file_name )}}" role="button">详情</a>
+
+                </div>
+            </div>
+        {% endfor %}
+
+
+    </table>
+{% endblock %}
