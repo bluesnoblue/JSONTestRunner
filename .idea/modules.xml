@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/read_unittest.iml" filepath="$PROJECT_DIR$/.idea/read_unittest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/json_test_runner.iml" filepath="$PROJECT_DIR$/.idea/json_test_runner.iml" />
     </modules>
   </component>
 </project>

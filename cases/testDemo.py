@@ -8,4 +8,3 @@ class TestDemo(unittest.TestCase):
         """test_demo1_doc"""
         print('test_demo1 running')
         self.assertTrue(True)
-        self.assertTrue(False)

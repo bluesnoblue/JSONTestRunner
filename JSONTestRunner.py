@@ -44,7 +44,8 @@ class _TestResult(TestResult):
         #   stack trace,
         # )
         self.result = []
-        self.passrate = float(0)
+        self.pass_rate = float(0)
+        self.outputBuffer = None
 
     def startTest(self, test):
         TestResult.startTest(self, test)
@@ -115,7 +116,7 @@ class JSONTestRunner:
         2: '错误',
     }
 
-    def __init__(self, stream=sys.stdout, verbosity=1, title='测试报告', description='', tester='tester'):
+    def __init__(self, stream=sys.stdout, verbosity=1, title='测试报告', description='', tester='测试人员'):
         self.stream = stream
         self.verbosity = verbosity
         self.title = title
@@ -133,87 +134,101 @@ class JSONTestRunner:
         return result
 
     def generate_report(self, result):
-        report_attrs = self.get_report_attributes(result)
-        report = self._generate_report(result)
-        output = dict(attributes=report_attrs, report=report)
-        j = json.dumps(output,indent=2)
-        self.stream.write(j)
+        attributes = self._get_report_attributes()
+        result_ = self._generate_result(result)
 
-    def _generate_report(self, result):
-        rows = []
+        report = dict(attributes=attributes, result=result_)
+        report = json.dumps(report, indent=2)
+        self.stream.write(report)
+
+    def _get_report_attributes(self):
+        start_time = str(self.start_time)[:19]
+        duration = str(self.stop_time - self.start_time)
+
+        report_attributes = dict(
+            title=self.title,
+            tester=self.tester,
+            description=self.description,
+            start_time=start_time,
+            duration=duration
+        )
+        return report_attributes
+
+    def _generate_result(self, result):
         sorted_result = self.sort_result(result.result)
-        for cid, (cls, cls_results) in enumerate(sorted_result):
-            # subtotal for a class
+        case_results = self._generate_class_result(sorted_result)
+        # 计算通过率
+        total = result.success_count + result.failure_count + result.error_count
+        self.pass_rate = total and str("%.2f%%" % (float(result.success_count) / float(total) * 100)) or 'No Test'
 
-            np = nf = ne = 0
-            for n, t, o, e in cls_results:
-                if n == 0:
-                    np += 1
-                elif n == 1:
-                    nf += 1
-                else:
-                    ne += 1
-            # format class description
-            if cls.__module__ == "__main__":
-                name = cls.__name__
-            else:
-                name = "%s.%s" % (cls.__module__, cls.__name__)
-            doc = cls.__doc__ and cls.__doc__.split("\n")[0] or ""
-            desc = doc and '%s: %s' % (name, doc) or name
-
-            # row = f'{ne},{desc},{np + nf + ne},{np},{nf},{ne},{cid + 1}'
-            test_list = []
-            for tid, (n, t, o, e) in enumerate(cls_results):
-                test_list.append(self._generate_report_test(cid, tid, n, t, o, e))
-
-            row = dict(desc=desc, count=np + nf + ne, Pass=np, fail=nf, error=ne, id=cid + 1, test_list=test_list)
-            rows.append(row)
-
-        report = dict(
-            test_list=rows,
+        result_ = dict(
             count=str(result.success_count + result.failure_count + result.error_count),
             Pass=str(result.success_count),
             fail=str(result.failure_count),
             error=str(result.error_count),
             pass_rate=self.pass_rate,
+            case_results=case_results,
         )
-        # report = f'{report}'
+        return result_
 
-        return report
+    def _generate_class_result(self, result):
+        case_results = []
+        for cls_id, (cls, cls_results) in enumerate(result):
+            # 类中的统计
+            num_pass = num_fail = num_error = 0
+            for n, _, _, _ in cls_results:
+                if n == 0:
+                    num_pass += 1
+                elif n == 1:
+                    num_fail += 1
+                else:
+                    num_error += 1
+            count = num_pass + num_fail + num_error
+            # 获取类名（模块+类名）
+            if cls.__module__ == "__main__":
+                name = cls.__name__
+            else:
+                name = "%s.%s" % (cls.__module__, cls.__name__)
+            # 获取类中的doc
+            doc = cls.__doc__ and cls.__doc__.split("\n")[0] or ""
+            # 获取类中测试方法的结果
+            method_results = self._generate_method_result(cls_id, cls_results)
 
-    def _generate_report_test(self, cid, tid, n, t, o, e):
-        has_output = bool(o or e)
-        tid = (n == 0 and 'p' or 'f') + 't%s_%s' % (cid + 1, tid + 1)
-        name = t.id().split('.')[-1]
-        doc = t.shortDescription() or ""
-        desc = doc and ('%s: %s' % (name, doc)) or name
-        # o and e should be byte string because they are collected from stdout and stderr?
-        if isinstance(o, str):
-            # uo = unicode(o.encode('string_escape'))
-            # uo = o.decode('latin-1')
-            uo = o
-        else:
-            uo = o
-        if isinstance(e, str):
-            # ue = unicode(e.encode('string_escape'))
-            # ue = e.decode('latin-1')
-            ue = e
-        else:
-            ue = e
+            case_result = dict(
+                id=cls_id + 1,
+                name=name,
+                doc=doc,
+                count=count,
+                Pass=num_pass,
+                fail=num_fail,
+                error=num_error,
+                method_results=method_results
+            )
+            case_results.append(case_result)
 
-        # 一个方法的结果
-        report_test = dict(
-            tid=tid,
-            Class=(n == 0 and 'hiddenRow' or 'none'),
-            style=n == 2 and 'errorCase' or (n == 1 and 'failCase' or 'passCase'),
-            desc=desc,
-            # status=self.STATUS[n],
-            status=n,
-            ue=ue,
-            uo=uo
-        )
-        # row = f'{row}'
-        return report_test
+        return case_results
+
+    def _generate_method_result(self, cls_id, cls_results):
+        method_results = []
+        for method_id, (n, method, output, error) in enumerate(cls_results):
+            tid = (n == 0 and 'p' or 'f') + 't%s_%s' % (cls_id + 1, method_id + 1)  # todo： 这里的tid规则很奇怪
+            name = method.id().split('.')[-1]
+            doc = method.shortDescription() or ""
+            # 一个方法的结果
+            # todo：渲染相关的参数不应该放在raw数据中
+            method_result = dict(
+                id=tid,
+                name=name,
+                doc=doc,
+                status=self.STATUS[n],
+                # status=n,
+                error=error,
+                output=output,
+                Class=(n == 0 and 'hiddenRow' or 'none'),  # view渲染相关
+                style=n == 2 and 'errorCase' or (n == 1 and 'failCase' or 'passCase'),  # view渲染相关
+            )
+            method_results.append(method_result)
+        return method_results
 
     @staticmethod
     def sort_result(result_list):
@@ -221,40 +236,11 @@ class JSONTestRunner:
         # Here at least we want to group them together by class.
         rmap = {}
         classes = []
-        for n, t, o, e in result_list:
-            cls = t.__class__
+        for n, test_method, output, error in result_list:
+            cls = test_method.__class__
             if cls not in rmap:
                 rmap[cls] = []
                 classes.append(cls)
-            rmap[cls].append((n, t, o, e))
+            rmap[cls].append((n, test_method, output, error))
         r = [(cls, rmap[cls]) for cls in classes]
         return r
-
-    def get_report_attributes(self, result):
-        start_time = str(self.start_time)[:19]
-        duration = str(self.stop_time - self.start_time)
-        # status = list()
-        # total = result.success_count + result.failure_count + result.error_count
-        # status.append(f'total: {total}')
-        # if result.success_count:
-        #     status.append(f'PASS: {result.success_count}')
-        # if result.failure_count:
-        #     status.append(f'FAILED: {result.failure_count}')
-        # if result.error_count:
-        #     status.append(f'ERROR: {result.error_count}')
-        # if status:
-        #     if result.success_count + result.failure_count + result.error_count:
-        #         self.pass_rate = str("%.2f%%" % (float(result.success_count) / float(
-        #             result.success_count + result.failure_count + result.error_count) * 100))
-        #     else:
-        #         self.pass_rate = 'N/A'
-        # else:
-        #     status = 'none'
-        report_attributes = dict(
-            tester=self.tester,
-            start_time=start_time,
-            duration=duration,
-            # status=status,
-            # pass_rate=self.pass_rate
-        )
-        return report_attributes

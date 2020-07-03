@@ -10,7 +10,7 @@ def home():
     for file in os.listdir('./reports'):
         file_name = file.split('.')[0]
         files.append(file_name)
-    print(files)
+    files.sort(reverse=True)
     return render_template('index.html', title='Home Page', files=files)
 
 

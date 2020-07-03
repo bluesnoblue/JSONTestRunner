@@ -13,6 +13,7 @@ class TestFoo(unittest.TestCase):
     def test_foo_2(self):
         """test_foo2_doc"""
         print('test_foo2 running')
+        print('a'+1)
         self.assertTrue(True)
         self.assertTrue(False)
 
