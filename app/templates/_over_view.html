@@ -1,0 +1,50 @@
+{% block app_content %}
+
+    <div class='page-header'><h1>总览</h1></div>
+
+    <div class="col-md-4">
+        <div class="panel panel-default">
+            <div class="panel-heading"><h3 class="panel-title">最新报告</h3></div>
+            <div class="panel-body">
+                <h1>{{report.title}}</h1>
+                <p class='attribute'><strong>测试人员：</strong>{{report.tester}}</p>
+                <p class='attribute'><strong>开始时间：</strong>{{report.start_time}}</p>
+                <p class='attribute'><strong>合计耗时：</strong>{{report.duration}}</p>
+                <div class="progress">
+                    <div class="progress-bar progress-bar-success" style="width: {{report.pass_rate}}">
+                        {{report.Pass_num}}
+                    </div>
+                    <div class="progress-bar progress-bar-danger progress-bar-striped" style="width: {{report.fail_rate}}">
+                        {{report.fail_num}}
+                    </div>
+                    <div class="progress-bar progress-bar-warning" style="width: {{report.error_rate}}">
+                        {{report.error_num}}
+                    </div>
+                </div>
+            </div>
+            <div class="panel-footer">
+                <button type="button" class="btn btn-link center-block",>
+                    <a href="{{ url_for('main.report_detail', reports_name = report.file_name )}}">详情</a>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-8">
+        <div class="panel panel-default">
+        <div class="panel-heading">
+        <h1 class="panel-title">报告列表</h1>
+        </div>
+        <div class="panel-body">
+            {% include '_report_list.html' %}
+        </div>
+        <div class="panel-footer">
+            <button type="button" class="btn btn-link center-block",>
+                <a href="{{ url_for('main.report_list') }}">查看所有</a>
+            </button>
+        </div>
+    </div>
+    </div>
+
+
+{% endblock %}

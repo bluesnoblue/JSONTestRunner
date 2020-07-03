@@ -19,21 +19,15 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f72ff3e2-3894-42b4-bbdf-c868d2dcf396" name="Default Changelist" comment="梳理代码 一台结构化项目">
-      <change afterPath="$PROJECT_DIR$/app/templates/_report_list.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/templates/_report_new.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/templates/base.html" afterDir="false" />
+    <list default="true" id="f72ff3e2-3894-42b4-bbdf-c868d2dcf396" name="Default Changelist" comment="新增报告列表页">
+      <change afterPath="$PROJECT_DIR$/app/templates/_over_view.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/templates/overview_page.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/JSONTestRunner.py" beforeDir="false" afterPath="$PROJECT_DIR$/JSONTestRunner.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/main/routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/main/routes.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/_report.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/_report.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/detail.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/detail.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cases/testDemo.py" beforeDir="false" afterPath="$PROJECT_DIR$/demo-cases/testDemo.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cases/test_foo.py" beforeDir="false" afterPath="$PROJECT_DIR$/demo-cases/test_foo.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/run.py" beforeDir="false" afterPath="$PROJECT_DIR$/run_demo_test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/_report_list.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/_report_list.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/base.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/detail.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/detail_page.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/report_list_page.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -66,7 +60,7 @@
     <property name="add_unversioned_files" value="true" />
     <property name="settings.editor.selected.configurable" value="preferences.externalTools" />
   </component>
-  <component name="RunManager" selected="Python.run_demo_test">
+  <component name="RunManager" selected="Python.reports_server">
     <configuration name="JSONTestRunner" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="json_test_runner" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -132,9 +126,9 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.run_demo_test" />
         <item itemvalue="Python.reports_server" />
         <item itemvalue="Python.JSONTestRunner" />
+        <item itemvalue="Python.run_demo_test" />
       </list>
     </recent_temporary>
   </component>
@@ -156,7 +150,14 @@
       <option name="project" value="LOCAL" />
       <updated>1593765945887</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="新增报告列表页">
+      <created>1593799276435</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1593799276435</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -173,33 +174,34 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="梳理代码 结构化项目" />
-    <option name="LAST_COMMIT_MESSAGE" value="梳理代码 结构化项目" />
+    <MESSAGE value="新增报告列表页" />
+    <option name="LAST_COMMIT_MESSAGE" value="新增报告列表页" />
   </component>
   <component name="WindowStateProjectService">
     <state x="591" y="-670" key="#Notifications" timestamp="1593762571774">
       <screen x="-260" y="-1080" width="1920" height="1080" />
     </state>
     <state x="591" y="-670" key="#Notifications/0.0.1440.900/-260.-1080.1920.1080@-260.-1080.1920.1080" timestamp="1593762571774" />
-    <state width="1419" height="245" key="GridCell.Tab.0.bottom" timestamp="1593796502662">
+    <state width="1419" height="245" key="GridCell.Tab.0.bottom" timestamp="1593804351992">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state width="1899" height="305" key="GridCell.Tab.0.bottom/0.0.1440.900/-260.-1080.1920.1080@-260.-1080.1920.1080" timestamp="1593776402081" />
-    <state width="1419" height="245" key="GridCell.Tab.0.bottom/0.0.1440.900/-260.-1080.1920.1080@0.0.1440.900" timestamp="1593796502662" />
-    <state width="1419" height="245" key="GridCell.Tab.0.center" timestamp="1593796502660">
+    <state width="1419" height="245" key="GridCell.Tab.0.bottom/0.0.1440.900/-260.-1080.1920.1080@0.0.1440.900" timestamp="1593804351992" />
+    <state width="1419" height="245" key="GridCell.Tab.0.center" timestamp="1593804351990">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state width="1899" height="305" key="GridCell.Tab.0.center/0.0.1440.900/-260.-1080.1920.1080@-260.-1080.1920.1080" timestamp="1593776402078" />
-    <state width="1419" height="245" key="GridCell.Tab.0.center/0.0.1440.900/-260.-1080.1920.1080@0.0.1440.900" timestamp="1593796502660" />
-    <state width="1419" height="245" key="GridCell.Tab.0.left" timestamp="1593796502657">
+    <state width="1419" height="245" key="GridCell.Tab.0.center/0.0.1440.900/-260.-1080.1920.1080@0.0.1440.900" timestamp="1593804351990" />
+    <state width="1419" height="245" key="GridCell.Tab.0.left" timestamp="1593804351988">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state width="1899" height="305" key="GridCell.Tab.0.left/0.0.1440.900/-260.-1080.1920.1080@-260.-1080.1920.1080" timestamp="1593776402076" />
-    <state width="1419" height="245" key="GridCell.Tab.0.left/0.0.1440.900/-260.-1080.1920.1080@0.0.1440.900" timestamp="1593796502657" />
-    <state width="1419" height="245" key="GridCell.Tab.0.right" timestamp="1593796502661">
+    <state width="1419" height="245" key="GridCell.Tab.0.left/0.0.1440.900/-260.-1080.1920.1080@0.0.1440.900" timestamp="1593804351988" />
+    <state width="1419" height="245" key="GridCell.Tab.0.right" timestamp="1593804351991">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state width="1899" height="305" key="GridCell.Tab.0.right/0.0.1440.900/-260.-1080.1920.1080@-260.-1080.1920.1080" timestamp="1593776402080" />
-    <state width="1419" height="245" key="GridCell.Tab.0.right/0.0.1440.900/-260.-1080.1920.1080@0.0.1440.900" timestamp="1593796502661" />
+    <state width="1419" height="245" key="GridCell.Tab.0.right/0.0.1440.900/-260.-1080.1920.1080@0.0.1440.900" timestamp="1593804351991" />
     <state x="209" y="-901" key="SettingsEditor" timestamp="1593775447620">
       <screen x="-260" y="-1080" width="1920" height="1080" />
     </state>
