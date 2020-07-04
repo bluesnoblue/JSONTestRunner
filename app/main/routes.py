@@ -24,7 +24,7 @@ def home():
             total = pass_ + fail + error
             fail_rate = total and str("%.0f%%" % (float(fail) / float(total) * 100)) or '0%'
             error_rate = total and str("%.0f%%" % (float(error) / float(total) * 100)) or '0%'
-            pass_rate = f'{100 - int(fail_rate.split("%")[0]) - int(fail_rate.split("%")[0])}%'
+            pass_rate = f'{100 - int(fail_rate.split("%")[0]) - int(error_rate.split("%")[0])}%'
             report_ = dict(
                 file_name=file,
                 Pass_num=pass_,
@@ -77,6 +77,7 @@ def report_list():
 
 @bp.route('/reports/<reports_name>', methods=['GET'])
 def report_detail(reports_name):
+    # todo: 需要判断文件是否存在
     with open(f'./reports/{reports_name}.json', encoding='utf-8') as fp:
         report = json.load(fp)
     return render_template('detail_page.html', title='Report Detail', report=report)
