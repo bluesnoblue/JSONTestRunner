@@ -30,8 +30,6 @@ class _TestResult(TestResult):
 
     def __init__(self, verbosity=1):
         super().__init__(self)
-        self.stdout0 = None
-        self.stderr0 = None
         self.success_count = 0
         self.failure_count = 0
         self.error_count = 0
@@ -44,8 +42,11 @@ class _TestResult(TestResult):
         #   stack trace,
         # )
         self.result = []
-        self.pass_rate = float(0)
-        self.outputBuffer = None
+
+        # 解决某些条件下ClassOrModuleLevelException引发的Error
+        self.outputBuffer = io.StringIO()
+        self.stdout0 = sys.stdout
+        self.stderr0 = sys.stderr
 
     def startTest(self, test):
         TestResult.startTest(self, test)
@@ -110,6 +111,7 @@ class _TestResult(TestResult):
 
 
 class JSONTestRunner:
+
     STATUS = {
         0: '通过',
         1: '失败',
@@ -136,7 +138,6 @@ class JSONTestRunner:
     def generate_report(self, result):
         attributes = self._get_report_attributes()
         result_ = self._generate_result(result)
-
         report = dict(attributes=attributes, result=result_)
         report = json.dumps(report, indent=2)
         self.stream.write(report)
@@ -189,6 +190,11 @@ class JSONTestRunner:
                 name = cls.__name__
             else:
                 name = "%s.%s" % (cls.__module__, cls.__name__)
+
+            # 处理ClassOrModuleLevelException导致的Error
+            if cls.__name__ == '_ErrorHolder':
+                name = 'ClassOrModuleLevelException'
+
             # 获取类中的doc
             doc = cls.__doc__ and cls.__doc__.split("\n")[0] or ""
             # 获取类中测试方法的结果
@@ -213,6 +219,11 @@ class JSONTestRunner:
         for method_id, (n, method, output, error) in enumerate(cls_results):
             tid = (n == 0 and 'p' or 'f') + 't%s_%s' % (cls_id + 1, method_id + 1)  # todo： 这里的tid规则很奇怪
             name = method.id().split('.')[-1]
+
+            # 处理ClassOrModuleLevelException导致的ErrorMethod
+            if ')' in name:
+                name = str(method)
+
             doc = method.shortDescription() or ""
             # 一个方法的结果
             # todo：渲染相关的参数不应该放在raw数据中
