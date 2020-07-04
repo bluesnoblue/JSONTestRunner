@@ -142,3 +142,4 @@ cython_debug/
 
 reports/
 .idea/
+.DS_Store/
