@@ -134,7 +134,7 @@ class JSONTestRunner:
         result = _TestResult(self.verbosity)
         test(result)
         self.stop_time = datetime.datetime.now()
-        self.generate_report(result)
+        result = self.generate_report(result)
         return result
 
     def generate_report(self, result):
@@ -142,8 +142,9 @@ class JSONTestRunner:
         result_ = self._generate_result(result)
         # report = dict(attributes=attributes, result=result_)
         report.update(result_)
-        report = json.dumps(report, indent=2)
-        self.stream.write(report)
+        report_j = json.dumps(report, indent=2)
+        self.stream.write(report_j)
+        return report
 
     def _get_report_attributes(self):
         start_time = str(self.start_time)[:19]

@@ -3,8 +3,8 @@
      <table class="table table-condensed table-bordered table-hover text-center">
          <tr>
             <td><b>测试用例/测试时间</b></td>
-            {% for file in files %}
-             <td><b>{{file}}</b></td>
+            {% for time in time_list %}
+             <td><b>{{time}}</b></td>
             {% endfor %}
          </tr>
          {% for test_method_result in data %}

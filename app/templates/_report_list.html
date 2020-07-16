@@ -31,7 +31,7 @@
                 </div>
             </div>
             <div>
-                <a class="btn btn-default" href="{{ url_for('main.report_detail', reports_name = report.file_name )}}" role="button">详情</a>
+                <a class="btn btn-default" href="{{ url_for('main.report_detail', report_id = report._id )}}" role="button">详情</a>
             </div>
         </div>
     {% endfor %}

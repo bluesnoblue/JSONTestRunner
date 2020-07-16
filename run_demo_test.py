@@ -1,14 +1,9 @@
-from unittest import defaultTestLoader, TextTestRunner
+from unittest import defaultTestLoader
 from JSONTestRunner import JSONTestRunner
-from time import strftime
-import os
+import requests
 
 cases = defaultTestLoader.discover('demo-cases/', pattern='test*.py')
-# runner = TextTestRunner()
-time_string = strftime('%Y-%m-%d_%H-%M-%S')
-if not os.path.exists('reports'):
-    os.mkdir('reports')
-with open(f'./reports/report_{time_string}.json', 'w') as fp:
-    runner = JSONTestRunner(stream=fp)
-    result = runner.run(cases)
-    # print(result)
+runner = JSONTestRunner()
+reprot = runner.run(cases)
+r = requests.post('http://127.0.0.1:5000/reports', json=reprot)
+print(r.status_code)
