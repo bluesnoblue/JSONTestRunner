@@ -1,0 +1,52 @@
+{% block app_content %}
+
+     <table class="table table-condensed table-bordered table-hover text-center">
+         <tr>
+            <td><b>测试用例/测试时间</b></td>
+            {% for file in files %}
+             <td><b>{{file}}</b></td>
+            {% endfor %}
+         </tr>
+         {% for test_method_result in data %}
+         {% set is_diff = False %}
+         {% set status_ = data[test_method_result][0] %}
+         {% for status in data[test_method_result] %}
+            {% if status!= status_ %}
+                {% set is_diff = True %}
+            {% endif %}
+         {% if data[test_method_result][-1]=='通过' %}
+            <tr class="success">
+         {% elif is_diff %}
+            <tr class="danger">
+         {% else %}
+            <tr class="success">
+         {% endif %}
+         {% endfor %}
+             <td>
+                 {{test_method_result}}
+             </td>
+
+             {% for status in data[test_method_result] %}
+                {% if status=='通过' %}
+                    {% set button_class = 'btn-success' %}
+                {% elif status=='失败' %}
+                    {% set button_class = 'btn-danger' %}
+                {% elif status=='错误' %}
+                    {% set button_class = 'btn-warning' %}
+                {% else %}
+                    {% set button_class = 'btn-default' %}
+                {% endif %}
+                 <td align='center'>
+                    <button class="btn {{button_class}} btn-xs">
+                        {{status}}
+                    </button>
+                 </td>
+             {% endfor %}
+
+         </tr>
+        {% endfor %}
+
+
+     </table>
+
+{% endblock %}

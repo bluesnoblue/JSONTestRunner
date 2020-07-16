@@ -100,22 +100,22 @@
 {% endblock %}
 
 <div class='page-header'>
-    <h1>{{report.attributes.title}}</h1>
-    <p class='attribute'><strong>测试人员：</strong>{{report.attributes.tester}}</p>
-    <p class='attribute'><strong>开始时间：</strong>{{report.attributes.start_time}}</p>
-    <p class='attribute'><strong>合计耗时：</strong>{{report.attributes.duration}}</p>
+    <h1>{{report.title}}</h1>
+    <p class='attribute'><strong>测试人员：</strong>{{report.tester}}</p>
+    <p class='attribute'><strong>开始时间：</strong>{{report.start_time}}</p>
+    <p class='attribute'><strong>合计耗时：</strong>{{report.duration}}</p>
     <p class='description'>
         <strong>测试结果：</strong>
-        共{{report.result.count}}，通过{{report.result.Pass}}，失败{{report.result.fail}}，错误{{report.result.error}}，
-        通过率={{report.result.pass_rate}}
+        共{{report.count}}，通过{{report.Pass}}，失败{{report.fail}}，错误{{report.error}}，
+        通过率={{report.pass_rate}}
     </p>
 </div>
 
 <p id='show_detail_line'>
-    <a class="btn btn-primary" href='javascript:showCase(0)'>概要{ {{report.result.pass_rate}} }</a>
-    <a class="btn btn-danger" href='javascript:showCase(1)'>失败{ {{report.result.fail}} }</a>
-    <a class="btn btn-success" href='javascript:showCase(2)'>通过{ {{report.result.Pass}} }</a>
-    <a class="btn btn-info" href='javascript:showCase(3)'>所有{ {{report.result.count}} }</a>
+    <a class="btn btn-primary" href='javascript:showCase(0)'>概要{ {{report.pass_rate}} }</a>
+    <a class="btn btn-danger" href='javascript:showCase(1)'>失败{ {{report.fail}} }</a>
+    <a class="btn btn-success" href='javascript:showCase(2)'>通过{ {{report.Pass}} }</a>
+    <a class="btn btn-info" href='javascript:showCase(3)'>所有{ {{report.count}} }</a>
 </p>
 
 <table id='result_table' class="table table-condensed table-bordered table-hover">
@@ -138,7 +138,7 @@
             <td>详细</td>
         </tr>
 
-        {% for cls_result in report.result.case_results %}
+        {% for cls_result in report.case_results %}
             {% if cls_result.error %}
                 <tr class='errorClass warning'>
             {% elif cls_result.fail %}
@@ -166,7 +166,7 @@
                             {{method_result.status}}
                         </button>
                         <div id='div_{{method_result.id}}' class="collapse in">
-                            <pre>
+                            <pre style="white-space: pre-wrap;">
                                 <p>{{method_result.doc}}</p>
                                 <p>{{method_result.output}}</p>
                                 <p>{{method_result.error}}</p>
@@ -179,10 +179,10 @@
 
         <tr id='total_row' class="text-center active">
             <td>总计</td>
-            <td>{{report.result.count}}</td>
-            <td>{{report.result.Pass}}</td>
-            <td>{{report.result.fail}}</td>
-            <td>{{report.result.error}}</td>
-            <td>通过率{{report.result.pass_rate}}</td>
+            <td>{{report.count}}</td>
+            <td>{{report.Pass}}</td>
+            <td>{{report.fail}}</td>
+            <td>{{report.error}}</td>
+            <td>通过率{{report.pass_rate}}</td>
         </tr>
     </table>

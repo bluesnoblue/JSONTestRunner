@@ -45,13 +45,13 @@ class _TestResult(TestResult):
 
         # 解决某些条件下ClassOrModuleLevelException引发的Error
         self.outputBuffer = io.StringIO()
-        self.stdout0 = sys.stdout
-        self.stderr0 = sys.stderr
+        self.stdout0 = None
+        self.stderr0 = None
 
     def startTest(self, test):
         TestResult.startTest(self, test)
         # just one buffer for both stdout and stderr
-        self.outputBuffer = io.StringIO()
+        # self.outputBuffer = io.StringIO()
         stdout_redirector.fp = self.outputBuffer
         stderr_redirector.fp = self.outputBuffer
         self.stdout0 = sys.stdout
@@ -69,7 +69,9 @@ class _TestResult(TestResult):
             sys.stderr = self.stderr0
             self.stdout0 = None
             self.stderr0 = None
-        return self.outputBuffer.getvalue()
+        value = self.outputBuffer.getvalue()
+        self.outputBuffer = io.StringIO()
+        return value
 
     def addSuccess(self, test):
         self.success_count += 1
@@ -136,9 +138,10 @@ class JSONTestRunner:
         return result
 
     def generate_report(self, result):
-        attributes = self._get_report_attributes()
+        report = self._get_report_attributes()
         result_ = self._generate_result(result)
-        report = dict(attributes=attributes, result=result_)
+        # report = dict(attributes=attributes, result=result_)
+        report.update(result_)
         report = json.dumps(report, indent=2)
         self.stream.write(report)
 
